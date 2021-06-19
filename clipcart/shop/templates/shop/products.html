@@ -1,0 +1,92 @@
+{% extends 'shop/base.html' %}
+{% block title %}Products{% endblock title %}
+{%block body %}
+{% load static %}
+
+<div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-center row">
+        <div class="col-md-10">
+            <div class="row p-2 bg-white border rounded">
+                <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image"
+                        src='/media/{{product.0.image}}'></div>
+                <div class="col-md-6 mt-1">
+                    <h5>{{product.0.product_title}}</h5>
+                    <div class="d-flex flex-row">
+                        <div class="ratings mr-2"><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                class="fa fa-star"></i><i class="fa fa-star"></i></div><span></span>
+                    </div>
+                    <p class="text-justify text-truncate para mb-0"><br>{{product.0.product_disc}}<br></p>
+                </div>
+                <div class="align-items-center align-content-center col-md-3 border-left mt-1">
+                    <div class="d-flex flex-row align-items-center">
+                        <h4 class="mr-1">₨{{product.0.product_price}}</h4>
+                    </div>
+                    <h6 class="text-success">Free shipping</h6>
+                    <div class="d-flex flex-column mt-4"><button id="pr{{product.0.product_id}}"
+                            class="btn btn-primary btn-sm cart" type="button">Clip to
+                            cart</button>
+                        <a href="/products/{{product.0.product_id}}"><button id="pv{{product.0.product_id}}"
+                                class="btn btn-outline-primary btn-sm mt-2" type="button">Details</button></a>
+                    </div>
+                </div>
+            </div>
+            {% for i in product|slice:"1:" %}
+            <div class="row p-2 bg-white border rounded mt-2">
+                <div class="col-md-3 mt-1"><img class="img-fluid img-responsive rounded product-image"
+                        src='/media/{{i.image}}'></div>
+                <div class="col-md-6 mt-1">
+                    <h5>{{i.product_title}}</h5>
+                    <div class="d-flex flex-row">
+                        <div class="ratings mr-2"><i class="fa fa-star"></i><i class="fa fa-star"></i><i
+                                class="fa fa-star"></i><i class="fa fa-star"></i></div><span></span>
+                    </div>
+                    <p class="text-justify text-wrap para mb-0"><br>{{i.product_disc}}<br></p>
+                </div>
+                <div class="align-items-center align-content-center col-md-3 border-left mt-1">
+                    <div class="d-flex flex-row align-items-center">
+                        <h4 class="mr-1">₨{{i.product_price}}</h4>
+                    </div>
+                    <h6 class="text-success">Free shipping</h6>
+                    <div class="d-flex flex-column mt-4"><button id="pr{{i.product_id}}"
+                            class="btn btn-primary btn-sm cart" type="button">Clip to
+                            cart</button>
+                        <a href="/products/{{i.product_id}}">
+                            <button class="btn btn-outline-primary btn-sm mt-2" type="button"
+                                id="pr{{i.product_id}}">Details</button></a>
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+            {% block js %}
+            <script>
+                console.log('working');
+                if (localStorage.getItem('cart') == null) {
+                    var cart = {};
+                }
+                else {
+                    cart = JSON.parse(localStorage.getItem('cart'));
+                    document.getElementById('cart').innerHTML = Object.keys(cart).length;
+                }
+                $('.cart').click(function () {
+                    console.log('clicked');
+                    var idstr = this.id.toString();
+                    console.log(idstr);
+                    if (cart[idstr] != undefined) {
+                        cart[idstr] = cart[idstr] + 1;
+                    }
+                    else {
+                        cart[idstr] = 1;
+                    }
+                    console.log(cart);
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    document.getElementById('cart').innerHTML = Object.keys(cart).length;
+
+                });
+            </script>
+
+            {% endblock %}
+        </div>
+    </div>
+</div>
+{% endblock body %}
